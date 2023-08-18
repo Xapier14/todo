@@ -65,7 +65,7 @@ func PostRefresh(c *gin.Context) {
 		return
 	}
 
-	accessToken, err := tokens.CreateAccessToken(&userCredential)
+	accessToken, err := tokens.CreateAccessToken(&userCredential, sessionToken)
 	if err != nil {
 		c.JSON(500, gin.H{
 			"error": "Could not issue access token",
@@ -73,7 +73,7 @@ func PostRefresh(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("access_token", accessToken, 60*60*24*30, "/", "", false, true)
+	c.SetCookie("access_token", accessToken, 60*60*24*30, "/", "", true, true)
 
 	c.JSON(200, login.GenerateSuccessfulRefreshResponse(sessionToken.Token))
 }

@@ -26,7 +26,8 @@ func RequireAuth(returnJson any) gin.HandlerFunc {
 			return
 		}
 		c.Set("access_token_data", jwtData)
-		c.Set("user_id", jwtData["id"])
+		c.Set("token_id", jwtData["token_id"])
+		c.Set("user_id", jwtData["user_id"])
 		c.Set("user_email", jwtData["email"])
 		c.Next()
 	}
