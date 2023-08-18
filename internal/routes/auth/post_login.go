@@ -26,12 +26,12 @@ func PostLogin(c *gin.Context) {
 	salt := hashing.GenerateSalt()
 	userCredential := models.UserCredential{}
 	result := credentials.GetUserCredentialByEmail(email, &userCredential)
-	if result.Error == nil {
+	if result == nil {
 		salt = userCredential.Salt
 	}
 	hashedPassword := hashing.HashPassword(password, salt)
 
-	if (result.Error != nil) || (hashedPassword != userCredential.PasswordHash) {
+	if (result != nil) || (hashedPassword != userCredential.PasswordHash) {
 		c.JSON(401, login.GenerateInvalidCredentialsResponse())
 		return
 	}
