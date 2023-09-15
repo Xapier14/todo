@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"time"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/xapier14/todo/internal/controllers/credentials"
@@ -36,6 +38,21 @@ func PostRefresh(c *gin.Context) {
 	if err != nil {
 		c.JSON(401, gin.H{
 			"error": "Invalid session token",
+		})
+		return
+	}
+
+	// check if expired
+	if time.Now().Compare(userSession.ExpiresAt) > 0 {
+		err = tokens.DeleteSessionTokenById(userSession.ID)
+		if err != nil {
+			c.JSON(500, gin.H{
+				"error": "Could not delete expired session token",
+			})
+			return
+		}
+		c.JSON(401, gin.H{
+			"error": "Session token expired",
 		})
 		return
 	}

@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
 	"github.com/xapier14/todo/internal/controllers/credentials"
@@ -22,6 +24,9 @@ import (
 func PostLogin(c *gin.Context) {
 	email := c.PostForm("email")
 	password := c.PostForm("password")
+
+	fmt.Println()
+	fmt.Println(password)
 
 	salt := hashing.GenerateSalt()
 	userCredential := models.UserCredential{}

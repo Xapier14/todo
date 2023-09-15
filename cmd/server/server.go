@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 
@@ -16,10 +17,14 @@ func setupRouter(config string) *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	router := gin.New()
+	corsConfig := cors.DefaultConfig()
 	fmt.Println("Config: " + config)
 	if config == "DEBUG" {
 		router.Use(gin.Logger())
 		router.Use(gin.Recovery())
+		corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+		corsConfig.AllowCredentials = true
+		router.Use(cors.New(corsConfig))
 	}
 	routes.InitializeRoutes(router, "")
 	return router

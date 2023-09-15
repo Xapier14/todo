@@ -23,8 +23,10 @@ func setupTodos(router *gin.RouterGroup) {
 func setupAuth(router *gin.RouterGroup) {
 	authRouter := router.Group("/auth")
 	authRouter.POST("/login", auth.PostLogin)
-	authRouter.POST("/refresh", middlewares.RequireAuth(notAuthorizedResponse), auth.PostRefresh)
+	authRouter.POST("/logout", auth.PostLogout)
+	authRouter.POST("/refresh", auth.PostRefresh)
 	authRouter.POST("/signup", auth.PostSignup)
+	authRouter.GET("/check", auth.GetCheck)
 }
 
 func InitializeRoutes(router *gin.Engine, basePath string) {
